@@ -4,7 +4,15 @@
 
 Unlike standard quiz apps, Rufus provides a **simulation-grade state machine**, a custom **desktop companion app** for flashcard synchronization, and a distraction-free simulated testing environment. It is built to handle complex user states, real-time analytics, and secure monetization.
 
-## **Live Demo**: www.rufususmle.com
+## 🚀 Instant Demo Access
+
+**Live Demo URL:** www.rufususmle.com
+
+To immediately experience the platform's performance and features without sign-up:
+
+1.  **Click the URL above** and navigate to the main page.
+2.  Select the **"Try the Demo"** button. You will be automatically logged in as a demo user and redirected to the main Dashboard.
+3.  From the Dashboard, navigate to **"Previous Tests"** and **continue** one of the premade test sessions to view the core **Test Interface** and features.
 
 -----
 
@@ -51,8 +59,7 @@ res.json = function (body?: any) {
 ### 2\. The Simulation State Machine One of the most complex backend challenges was creating a "Time-Travel" capable state machine. In a real exam, time does not stop. If a user closes their browser during a simulated exam block and returns 2 hours later, the system must calculate exactly where they *should* be.
 
   * **Auto-Sync Logic:** The `TestSessionManager` acts as the source of truth. It uses a recursive `manageTestState` loop to fast-forward simulated time. It calculates transitions between simulated states (`ON_BLOCK` $\rightarrow$ `JUST_FINISHED_BLOCK` $\rightarrow$ `ON_BREAK` $\rightarrow$ `NEXT_BLOCK`) based strictly on server-time deltas.
-  * **Data Integrity:** The state evaluation uses an XOR logic gate (`this.xor(...)`) to ensure the test session can never be in two invalid states simultaneously.
-
+ * **Testing:** Given the critical nature of the testing environment, the entire state machine was rigorously tested using Jest to guarantee correct, deterministic behavior under all time-sync and transition scenarios.
 ### 3\. The Anki Sync Ecosystem (Web $\leftrightarrow$ Desktop) Rufus features a novel integration with **Anki**, allowing users to unlock flashcards automatically as they solve questions. The synchronization flow is a secure, multi-step handshake:
 
 1.  **Initiation:** The user clicks "Sync" on the web dashboard. The frontend requests a secure, one-time `SyncToken` from the backend.
