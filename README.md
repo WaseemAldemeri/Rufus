@@ -4,6 +4,8 @@
 
 Unlike standard quiz apps, Rufus provides a **simulation-grade state machine**, a custom **desktop companion app** for flashcard synchronization, and a distraction-free simulated testing environment. It is built to handle complex user states, real-time analytics, and secure monetization.
 
+![Main Test interface.](Media/RufusPreview.png)
+
 ## 🚀 Instant Demo Access
 
 **Live Demo URL:** www.rufususmle.com
@@ -32,8 +34,7 @@ The platform operates on a modern **Full-Stack TypeScript** architecture, suppor
 ## 🚀 Key Technical Features
 
 ### 1\. High-Performance "Phantom" Demo Mode To allow users to test the full platform without signing up or polluting the database, I implemented a sophisticated **Demo Middleware** combined with **Optimistic UI** updates.
-
-  * **Optimistic UI:** The frontend never waits for the backend to confirm an action (like answering a question or highlighting text). It updates the interface immediately, making the testing experience **lightning fast**.
+* **Optimistic UI:** The frontend never waits for the backend to confirm an action (like answering a question or highlighting text). It updates the interface immediately, making the testing experience **lightning fast**.
   * **The "Phantom" Middleware:** For demo users, the backend acts as a read-only cache.
       * **Read Operations (GET):** Responses are cached using `LRUCache`. If a request is repeated, it returns instantly from memory.
       * **Write Operations (POST/PUT):** The middleware intercepts these requests and immediately returns a `200 OK` status **without touching the database**. Because the frontend relies on optimistic updates, the user sees their changes "persist" locally during the session, creating a seamless experience with zero database cost.
@@ -60,6 +61,10 @@ res.json = function (body?: any) {
 
   * **Auto-Sync Logic:** The `TestSessionManager` acts as the source of truth. It uses a recursive `manageTestState` loop to fast-forward simulated time. It calculates transitions between simulated states (`ON_BLOCK` $\rightarrow$ `JUST_FINISHED_BLOCK` $\rightarrow$ `ON_BREAK` $\rightarrow$ `NEXT_BLOCK`) based strictly on server-time deltas.
  * **Testing:** Given the critical nature of the testing environment, the entire state machine was rigorously tested using Jest to guarantee correct, deterministic behavior under all time-sync and transition scenarios.
+
+![GIF demonstrating the Simulation Mode.](Media/SimulationShortOptimized.gif)
+
+   
 ### 3\. The Anki Sync Ecosystem (Web $\leftrightarrow$ Desktop) Rufus features a novel integration with **Anki**, allowing users to unlock flashcards automatically as they solve questions. The synchronization flow is a secure, multi-step handshake:
 
 1.  **Initiation:** The user clicks "Sync" on the web dashboard. The frontend requests a secure, one-time `SyncToken` from the backend.
@@ -67,12 +72,17 @@ res.json = function (body?: any) {
 3.  **Secure Fetch:** The Add-on uses the token to authenticate with the Rufus Backend and requests the sync process to start.
 4.  **Batch Processing:** The backend prepares a pool of cards based on the user's answered questions (`UserCardsSyncPool`). The Add-on fetches these in batches, and upon successful insertion into Anki, notifies the backend to mark them as `syncedAt`, ensuring no data is lost or duplicated.
 
+![GIF demonstrating the Anki Sync.](Media/AnkiShortOptimized.gif)
+
+
 ### 4\. Gamification & "Betty" System
 
 To prevent burnout, the platform includes a gamified reward system centered around "Betty" (the app's mascot).
 
   * **Cookies & Rewards:** Users earn "Cookies" for completing blocks and maintaining streaks.
   * **Leaderboard:** Users can "feed" Betty their cookies to climb the global leaderboard. The backend aggregates these scores using optimized queries (`orderBy: { cookiesSpent: 'desc' }`) to drive competition and engagement.
+
+![GIF demonstrating the betty reward system.](Media/BettyShortOptimized.gif)
 
 -----
 
